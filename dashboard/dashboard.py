@@ -9,8 +9,8 @@ from sklearn.preprocessing import StandardScaler
 
 # --- Page Config ---
 st.set_page_config(
-    page_title="AccessGuru Analytics", 
-    page_icon="♿",
+    page_title="Knoxicle - AccessGuru Analytics", 
+    page_icon="assets/icon.png",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -277,8 +277,31 @@ def main():
         st.rerun()
 
     # --- Header ---
-    st.title("♿ AccessGuru: Accessibility Insights")
-    st.markdown("Analyzing Web Accessibility Violations (WCAG 2.1)")
+    col1, col2 = st.columns([1, 8])
+
+    with col1:
+        st.image("assets/icon.png", width=70)
+
+    with col2:
+        st.markdown(
+            """
+            <h2 style='color: #1f77b4; padding-top: 10px; margin-bottom: 0;'>
+                Knoxicle: AccessGuru - Accessibility Insights
+            </h2>
+            """, 
+            unsafe_allow_html=True
+        )
+        
+    st.divider()
+    st.markdown(
+            """
+            <h5 style='color: #1f77b4; padding-top: 10px; margin-bottom: 0;'>
+                Analyzing Web Accessibility Violations (WCAG 2.1)
+            </h5>
+            """, 
+            unsafe_allow_html=True
+        )
+    # st.markdown("Analyzing Web Accessibility Violations (WCAG 2.1)")
 
     # --- Kpi Row ---
     kpi1, kpi2, kpi3, kpi4 = st.columns(4)
@@ -294,7 +317,7 @@ def main():
 
     st.markdown("---")
 
-    # --- TABS ---
+    # --- Tabs ---
     tab1, tab2, tab3, tab4, tab5 = st.tabs([
         "📊 Overview", "🔥 Comparison", "🚨 Severe Issues", "🌲 Hierarchy", "🤖 ML Insights"
     ])
