@@ -575,7 +575,7 @@ def main():
             pattern that makes these types of sites (like {top_domain.title()}) fundamentally harder to access.
         """)
 
-    # --- Footer ---
+    # --- Footer --- 
     st.markdown("---")
     footer_col1, footer_col2 = st.columns(2)
     
