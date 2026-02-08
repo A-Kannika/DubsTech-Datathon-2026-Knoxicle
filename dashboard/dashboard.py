@@ -223,6 +223,11 @@ def get_risk_clusters(df):
     
     return pivot_df.reset_index()
 
+@st.cache_data
+def convert_df_to_csv(df):
+    # This converts the dataframe into a CSV string
+    return df.to_csv(index=False).encode('utf-8')
+
 # --- Main App ---
 def main():
     local_css()
@@ -234,6 +239,42 @@ def main():
     selected_domains = st.sidebar.multiselect("Select Domains", all_domains, default=all_domains)
     
     filtered_df = df[df['domain_category'].isin(selected_domains)]
+
+    # NEW: Download Center in Sidebar
+    st.sidebar.divider()
+    st.sidebar.subheader("💾 Download Center")
+    st.sidebar.write("Export the current filtered analysis for your records.")
+    
+    csv_data = convert_df_to_csv(filtered_df)
+    
+    st.sidebar.download_button(
+        label="📥 Download Data Report (CSV)",
+        data=csv_data,
+        file_name='accessguru_filtered_report.csv',
+        mime='text/csv',
+        help="Downloads the cleaned dataset based on your current domain filters."
+    )
+
+    with st.sidebar.expander("📖 About the Project"):
+        st.write("""
+            **AccessGuru** analyzes over 3,500 real-world web accessibility 
+            violations across 448 websites. 
+            
+            Our goal is to uncover patterns of digital exclusion and provide 
+            data-driven insights to help build a more inclusive web.
+        """)
+
+    with st.sidebar.expander("🏷️ Violation Categories"):
+        st.markdown("""
+            - **Syntactic:** Code-level errors (missing tags, improper ARIA).
+            - **Semantic:** Meaning-level errors (missing alt-text, poor headings).
+            - **Layout:** Visual-level errors (low color contrast, spacing).
+        """)
+    
+    # Add a 'Clear Cache' button for the hackathon presentation
+    if st.sidebar.button("Re-train ML Model"):
+        st.cache_resource.clear()
+        st.rerun()
 
     # --- Header ---
     st.title("♿ AccessGuru: Accessibility Insights")
@@ -325,6 +366,16 @@ def main():
 
     with tab5:
         st.header("🤖 Machine Learning & Risk Modeling")
+
+        # Technical Logic Summary for Judges
+        with st.expander("🛠️ How the AI Model Works (The Pipeline)"):
+            st.write("""
+                Our predictive engine follows a 4-step architecture:
+                1. **Input:** User selects categorical web attributes.
+                2. **Encoding:** Text labels are mapped to high-dimensional integers.
+                3. **Classification:** A Random Forest model (100 estimators) evaluates the risk profile.
+                4. **Decoding:** Numerical results are transformed back into WCAG Impact levels.
+            """)
 
         # --- Prediction Section ---
         st.subheader("🔮 Predict Violation Impact")
@@ -472,6 +523,24 @@ def main():
             design process of that industry. For users, this means the barrier isn't just a one-off mistake, but a 
             pattern that makes these types of sites (like {top_domain.title()}) fundamentally harder to access.
         """)
+
+    # --- Footer ---
+    st.markdown("---")
+    footer_col1, footer_col2 = st.columns(2)
+    
+    with footer_col1:
+        st.markdown("""
+            **Data Source:** AccessGuru Dataset (WCAG 2.1 Guidelines)  
+            *3,500+ violations across Health, Education, Gov, and more.*
+        """)
+        
+    with footer_col2:
+        st.markdown("""
+            <div style='text-align: right;'>
+                Created for the <b>DubsTech Data Datathon 2026</b><br>
+                Team: Knoxicle
+            </div>
+        """, unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()
