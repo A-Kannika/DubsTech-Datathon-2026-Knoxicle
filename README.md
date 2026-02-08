@@ -40,6 +40,17 @@ AccessGuru treats accessibility as a risk-management problem. Our ML logic follo
 
 ---
 
+## 📉 Model Performance & Validation
+
+To ensure the reliability of our accessibility risk predictions, we validated the model using an 80/20 train-test split:
+
+- **Algorithm**: Random Forest Classifier (100 Estimators)
+- **Model Accuracy**: ~XX.X% (Calculated via Mean Accuracy on unseen test data)
+- **Margin of Error**: ±X.X%
+- **Validation Method**: Hold-out validation to prevent overfitting and ensure the model generalizes well to new, unseen websites.
+
+---
+
 ## 📂 Project Structure
 
 ```text
