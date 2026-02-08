@@ -4,63 +4,63 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 
-## 🌟 Overview
-**Knoxicle: AccessGuru - Accessibility Insights** is an advanced analytics dashboard and predictive modeling tool designed to uncover systemic barriers in web accessibility. Developed for the **DubsTech Datathon 2026**, this project analyzes over 3,500 real-world WCAG 2.1 violations across 448 websites in 6 major domains (Tech, Education, Government, Health, News, and E-commerce).
+## Overview
+**Knoxicle: AccessGuru - Accessibility Insights** is a dashboard and Machine Learning & Risk Modeling built for the 7th DubsTech Datathon. It looks at more than 3,500 real web accessibility errors from 448 websites. I focused on six main areas: Tech, Education, Government, Health, News, and E-commerce.
 
-By moving beyond simple "error counts," Knoxicle: AccessGuru uses Machine Learning to predict violation impact and clustering to identify high-risk digital environments, providing actionable insights for digital equity.
-
----
-
-## 🚀 Key Features
-
-- **🔮 Predictive Impact Modeling**: A Random Forest Classifier that estimates the severity of a violation (Critical, Serious, Moderate, Minor) based on the domain and violation type.
-- **🛡️ Website Risk Clustering**: K-Means clustering identifies "High Risk" websites by analyzing multi-dimensional failure patterns.
-- **🌲 Hierarchical Deep-Dive**: Interactive Treemaps that allow users to drill down from Industry domains into specific WCAG rule failures.
-- **🔥 Barrier Comparison**: Side-by-side analysis of different industries to see which sectors are leading—or lagging—in accessible design.
-- **🏆 Domain Ranking**: A risk-based leaderboard ranking industries by their likelihood of presenting "Critical" accessibility blockers.
+Instead of just counting errors, I used Machine Learning to see how these errors actually impact users. The goal is to show which industries have the biggest barriers and help developers know what to fix first to make the web more inclusive.
 
 ---
 
-## 🛠️ Tech Stack
+## Key Features
 
-- **Frontend**: [Streamlit](https://streamlit.io/) (Custom CSS & Interactive UI)
-- **Data Engine**: [Pandas](https://pandas.pydata.org/)
-- **Visualizations**: [Plotly Express](https://plotly.com/python/), [Graph Objects](https://plotly.com/graph-objects/)
-- **Machine Learning**: [Scikit-Learn](https://scikit-learn.org/) (Random Forest, K-Means, Label Encoding, StandardScaler)
+- **Predict Violation Impact**: I used a Random Forest model to guess how serious a web error is (Critical, Serious, etc.) based on the industry and the type of violation.
+- **Website Risk Clustering**: Using K-Means clustering, the app groups websites into "Low," "Moderate," or "High" risk levels based on their failure patterns.
+- **Global Violation Hierarchy**: I added interactive Treemaps so you can click through different industries to see specific WCAG rule failures.
+- **Compare Invisible Barriers**: Side-by-side analysis of different industries. You can pick two industries and compare their accessibility barriers directly.
+- **Ranking of Inaccessible Design**: A leaderboard that shows which industries are most likely to have "Critical" blockers for users.
 
 ---
 
-## 📊 The Machine Learning Pipeline
+## Tech Stack
+
+- **App Framework:** Streamlit (with custom CSS for the UI)
+- **Data Handling:** Pandas
+- **Visualizations**: Plotly (Express and Graph Objects)
+- **Machine Learning**: Scikit-Learn (Random Forest, K-Means, and Preprocessing)
+
+---
+
+## How the Model Works
 
 Knoxicle: AccessGuru - Accessibility Insights treats accessibility as a risk-management problem. Our ML logic follows a rigorous pipeline:
 1. **Data Preprocessing**: Cleaning and standardizing categorical domain data.
 2. **Feature Engineering**: Vectorizing text-based violations into numerical formats via Label Encoding.
 3. **Training**: A Random Forest model (100 estimators) trained to recognize the relationship between WCAG categories and user impact.
-4. **Explainability**: The "ML Insights" tab provides an interface for users to test hypothetical scenarios and see real-time AI predictions.
+4. **Testing**: You can use the "ML Insights" tab to try different scenarios and see the model's prediction in real-time.
 
 ---
 
-## 📉 Model Performance & Validation
+## Model Performance & Validation
 
-To ensure the reliability of our accessibility risk predictions, we validated the model using an 80/20 train-test split:
+To make sure the predictions were accurate, I split the data (80% for training and 20% for testing):
 
-- **Algorithm**: Random Forest Classifier (100 Estimators)
+- **Model Algorithm**: Random Forest Classifier (100 Estimators)
 - **Model Accuracy**: 97.4% (Calculated via Mean Accuracy on unseen test data)
 - **Margin of Error**: ±0.3%
-- **Validation Method**: Hold-out validation to prevent overfitting and ensure the model generalizes well to new, unseen websites.
+- **Validation**: I used a hold-out test set to make sure the model works on new data, not just the data it already saw.
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 ```text
 ├── dashboard/
 │   └── dashboard.py          # Main Streamlit application
 ├── data/
-│   └── Access_to_Tech_Dataset.csv   # Processed accessibility dataset
+│   └── Access_to_Tech_Dataset.csv   # The accessibility data
 ├── assets/
-│   └── icon.png              # Project Branding
-├── requirements.txt          # Python dependencies
+│   └── icon.png              # App icon
+├── requirements.txt          # Python libraries needed
 └── README.md                 # Project documentation
 ```
 ---
@@ -73,7 +73,7 @@ GitHub repository: [https://github.com/A-Kannika/DubsTech-Datathon-2026-Knoxicle
 
 ---
 
-## ⚙️ Installation & Local Setup
+## Installation & Local Setup
 
 1. **Clone the repository**:
 
@@ -102,8 +102,8 @@ streamlit run dashboard/dashboard.py
 ```
 ---
 
-## 🤝 Team Knoxicle
-Developed with ❤️ for the DubsTech Datathon 2026.
+## Team Knoxicle
+Developed for the DubsTech Datathon 2026.
 - Team member: Kannika Armstrong
 - Goal: To transform raw accessibility data into a narrative of digital inclusion.
 - Mission: Promoting Digital Equity through Data Science.
