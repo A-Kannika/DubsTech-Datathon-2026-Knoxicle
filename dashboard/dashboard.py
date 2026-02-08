@@ -245,9 +245,9 @@ def get_risk_clusters(df):
     
     # Rename clusters based on average violation volume for better UX
     cluster_order = pivot_df.groupby('Cluster')['total_violations'].mean().sort_values().index
-    risk_mapping = {cluster_order[0]: "🟢 Low Risk", 
-                    cluster_order[1]: "🟡 Moderate Risk", 
-                    cluster_order[2]: "🔴 High Risk"}
+    risk_mapping = {cluster_order[0]: "Low Risk", 
+                    cluster_order[1]: "Moderate Risk", 
+                    cluster_order[2]: "High Risk"}
     
     pivot_df['Risk Level'] = pivot_df['Cluster'].map(risk_mapping)
     
@@ -264,7 +264,7 @@ def main():
     df = load_and_preprocess_data()
     
     # --- Sidebar ---
-    st.sidebar.header("📊 Filter Dashboard")
+    st.sidebar.header("Filter Dashboard")
     all_domains = df['domain_category'].unique().tolist()
     selected_domains = st.sidebar.multiselect("Select Domains", all_domains, default=all_domains)
     
@@ -272,34 +272,26 @@ def main():
 
     # Download Center in Sidebar
     st.sidebar.divider()
-    st.sidebar.subheader("💾 Download Center")
+    st.sidebar.subheader("Data & Project")
     st.sidebar.write("Export the current filtered analysis for your records.")
     
     csv_data = convert_df_to_csv(filtered_df)
     
     st.sidebar.download_button(
-        label="📥 Download Data Report (CSV)",
+        label="Download Data Report (CSV)",
         data=csv_data,
         file_name='accessguru_filtered_report.csv',
         mime='text/csv',
         help="Downloads the cleaned dataset based on your current domain filters."
     )
 
-    with st.sidebar.expander("📖 About the Project"):
+    with st.sidebar.expander("About the Project"):
         st.write("""
-            **AccessGuru** analyzes over 3,500 real-world web accessibility 
-            violations across 448 websites. 
-            
-            Our goal is to uncover patterns of digital exclusion and provide 
-            data-driven insights to help build a more inclusive web.
+            - This project was created for the 7th DubsTech Datathon. We analyzed a dataset of over 3,500 web accessibility violations from 448 different websites.
+            - As a Computer Science student, I wanted to build this tool to show where websites are failing to meet WCAG 2.1 standards. 
+            - This dashboard helps developers and researchers see which industries, like Education or Tech, have the most barriers for users with disabilities.
         """)
 
-    with st.sidebar.expander("🏷️ Violation Categories"):
-        st.markdown("""
-            - **Syntactic:** Code-level errors (missing tags, improper ARIA).
-            - **Semantic:** Meaning-level errors (missing alt-text, poor headings).
-            - **Layout:** Visual-level errors (low color contrast, spacing).
-        """)
     
     # Add a 'Clear Cache' button for the hackathon presentation
     if st.sidebar.button("Re-train ML Model"):
@@ -349,7 +341,7 @@ def main():
 
     # --- Tabs ---
     tab1, tab2, tab3, tab4, tab5 = st.tabs([
-        "📊 Overview", "🔥 Comparison", "🚨 Severe Issues", "🌲 Hierarchy", "🤖 ML Insights"
+        "Overview", "Comparison", "Severe Issues", "Hierarchy", "Machine Learning & Risk Modeling"
     ])
 
     with tab1:
@@ -365,7 +357,7 @@ def main():
         st.plotly_chart(plot_top_violation_types(filtered_df), use_container_width=True)
 
     with tab2:
-        st.subheader("🕵️ Compare Invisible Barriers")
+        st.subheader("Compare Invisible Barriers")
         comp_selection = st.multiselect("Pick domains to compare side-by-side:", all_domains, default=all_domains[:2])
         if comp_selection:
             st.plotly_chart(plot_invisible_barriers(df, comp_selection), use_container_width=True)
@@ -375,7 +367,7 @@ def main():
         st.plotly_chart(plot_heatmap(filtered_df), use_container_width=True)
 
     with tab3:
-        st.subheader("🚨 Top 10 Inaccessible Pages")
+        st.subheader("Top 10 Inaccessible Pages")
         st.table(get_severe_pages(filtered_df))
         
         impact_colors = {
@@ -408,17 +400,17 @@ def main():
         st.plotly_chart(fig_impact, use_container_width=True)
 
     with tab4:
-        st.subheader("🌲 Global Violation Hierarchy")
+        st.subheader("Global Violation Hierarchy")
         st.write("Click on a domain (e.g., 'tech') to see which violation categories and specific rules are failing most often.")
         
         # This will render with the high-contrast Plotly colors
         treemap_fig = plot_violation_treemap(filtered_df)
         st.plotly_chart(treemap_fig, use_container_width=True)
         
-        st.info("💡 **Dashboard Tip:** The size of the boxes represents the volume of violations. This allows you to see at a glance that while one domain might have many pages, another might have a higher density of specific 'Semantic' or 'Layout' errors.")
+        st.info("**Dashboard Tip:** The size of the boxes represents the volume of violations. This allows you to see at a glance that while one domain might have many pages, another might have a higher density of specific 'Semantic' or 'Layout' errors.")
 
     with tab5:
-        st.header("🤖 Machine Learning & Risk Modeling")
+        st.header("Machine Learning & Risk Modeling")
 
         # Train and get metrics
         model, le_dict, acc, err = train_severity_model(df)
@@ -429,17 +421,17 @@ def main():
         m2.metric("Margin of Error", f"±{err*100:.1f}%")
 
         # Technical Logic Summary for Judges
-        with st.expander("🛠️ How the AI Model Works (The Pipeline)"):
+        with st.expander("How the Model Works"):
             st.write("""
-                Our predictive engine follows a 4-step architecture:
-                1. **Input:** User selects categorical web attributes.
-                2. **Encoding:** Text labels are mapped to high-dimensional integers.
-                3. **Classification:** A Random Forest model (100 estimators) evaluates the risk profile.
-                4. **Decoding:** Numerical results are transformed back into WCAG Impact levels.
+                This prediction tool uses a Random Forest Classifier to estimate the impact of a web error.
+                - **Data Selection:** We take the domain (industry), the category of the error, and the specific violation name.
+                - **Processing**: We use LabelEncoder to turn these categories into numbers the model can understand.
+                - **Modeling:** The Random Forest looks at the patterns in the 3,500+ records to find which combinations usually lead to "Critical" or "Serious" impacts.
+                - **Output:** The model predicts a WCAG impact level to help developers prioritize what to fix first.
             """)
 
         # --- Prediction Section ---
-        st.subheader("🔮 Predict Violation Impact")
+        st.subheader("Predict Violation Impact")
         st.markdown("Select attributes to estimate how severe a web accessibility violation will be.")
     
         
@@ -452,7 +444,7 @@ def main():
             available_names = df[df['violation_category'] == selected_cat]['violation_name'].unique()
             selected_name = st.selectbox("Specific Violation", sorted(available_names))
 
-        if st.button("Run AI Prediction"):
+        if st.button("Run Model Prediction"):
             # Convert strings back to numbers using the encoders
             input_data = pd.DataFrame([{
                 'domain_category': le_dict['domain_category'].transform([selected_domain])[0],
@@ -487,7 +479,7 @@ def main():
         st.divider()
 
         # --- Clustering Section ---
-        st.subheader("🛡️ Website Risk Clustering")
+        st.subheader("Website Risk Clustering")
         st.write("We used K-Means Clustering to group the 448 websites by their 'failure patterns'.")
         
         # Generate the cluster data
@@ -516,9 +508,9 @@ def main():
                 selected_y: f"{selected_y} Violations"
             },
             color_discrete_map={
-                "🟢 Low Risk": "green", 
-                "🟡 Moderate Risk": "orange", 
-                "🔴 High Risk": "red"
+                "Low Risk": "green", 
+                "Moderate Risk": "orange", 
+                "High Risk": "red"
             }
         )
         
@@ -533,7 +525,7 @@ def main():
         """)
 
         # --- Domain Ranking ---
-        st.subheader("🏆 Ranking of Inaccessible Design")
+        st.subheader("Ranking of Inaccessible Design")
         st.write("Rank domains based on the likelihood of encountering specific impact levels.")
 
         # Add the Selector
@@ -571,7 +563,7 @@ def main():
         top_value = ranking['Likelihood %'].iloc[0]
 
         st.info(f"""
-            ### 📊 Risk Summary: {impact_to_rank.title()} Impact
+            ### Risk Summary: {impact_to_rank.title()} Impact
             
             **Key Findings:**
             - **Highest Risk Domain:** {top_domain.title()}
