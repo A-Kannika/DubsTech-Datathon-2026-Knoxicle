@@ -32,7 +32,7 @@ By moving beyond simple "error counts," Knoxicle: AccessGuru uses Machine Learni
 
 ## 📊 The Machine Learning Pipeline
 
-AccessGuru treats accessibility as a risk-management problem. Our ML logic follows a rigorous pipeline:
+Knoxicle: AccessGuru - Accessibility Insights treats accessibility as a risk-management problem. Our ML logic follows a rigorous pipeline:
 1. **Data Preprocessing**: Cleaning and standardizing categorical domain data.
 2. **Feature Engineering**: Vectorizing text-based violations into numerical formats via Label Encoding.
 3. **Training**: A Random Forest model (100 estimators) trained to recognize the relationship between WCAG categories and user impact.
